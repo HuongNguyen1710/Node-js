@@ -1,0 +1,18 @@
+{
+  "name": "do-an-web-ban-may-tinh",
+  "version": "1.0.0",
+  "description": "Website bán linh kiện máy tính - Node.js Express",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "mongoose": "^8.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
