@@ -1,0 +1,30 @@
+<table class="table table-sm table-hover">
+  <thead>
+    <tr>
+      <th>Mã đơn</th>
+      <th>Ngày đặt</th>
+      <th>Tổng tiền</th>
+      <th>Trạng thái</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% orders.forEach(function (o) { %>
+      <tr>
+        <td><%= o._id %></td>
+        <td><%= o.createdAt.toLocaleString("vi-VN") %></td>
+        <td><%= o.totalAmount.toLocaleString("vi-VN") %>₫</td>
+        <td>
+          <% if (o.status === "pending") { %>
+            <span class="badge bg-secondary">Chờ xác nhận</span>
+          <% } else if (o.status === "processing") { %>
+            <span class="badge bg-info text-dark">Đang xử lý</span>
+          <% } else if (o.status === "completed") { %>
+            <span class="badge bg-success">Hoàn thành</span>
+          <% } else { %>
+            <span class="badge bg-danger">Đã hủy</span>
+          <% } %>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

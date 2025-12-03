@@ -1,0 +1,195 @@
+<h3 class="mb-3"><%= title || "Danh sách sản phẩm" %></h3>
+
+<form class="row g-2 mb-3" method="get">
+  <!-- HÀNG 1: tên + loại + rating + sort -->
+  <div class="col-md-3">
+    <input
+      type="text"
+      name="q"
+      class="form-control"
+      placeholder="Tìm theo tên"
+      value="<%= (query && query.q) || '' %>"
+    >
+  </div>
+
+  <div class="col-md-3">
+    <select name="category" class="form-select">
+      <option value="">Tất cả loại sản phẩm</option>
+      <option value="ipad"      <%= query && query.category === 'ipad'      ? 'selected' : '' %>>iPad</option>
+      <option value="macbook"   <%= query && query.category === 'macbook'   ? 'selected' : '' %>>MacBook</option>
+      <option value="imac"      <%= query && query.category === 'imac'      ? 'selected' : '' %>>iMac / Mac mini</option>
+      <option value="watch"     <%= query && query.category === 'watch'     ? 'selected' : '' %>>Apple Watch</option>
+      <option value="airpods"   <%= query && query.category === 'airpods'   ? 'selected' : '' %>>AirPods</option>
+      <option value="monitor"   <%= query && query.category === 'monitor'   ? 'selected' : '' %>>Màn hình</option>
+      <option value="storage"   <%= query && query.category === 'storage'   ? 'selected' : '' %>>Ổ cứng / lưu trữ</option>
+      <option value="accessory" <%= query && query.category === 'accessory' ? 'selected' : '' %>>Phụ kiện khác</option>
+    </select>
+  </div>
+
+  <div class="col-md-3">
+    <select name="minRating" class="form-select">
+      <option value="">Tất cả đánh giá</option>
+      <option value="3" <%= query && query.minRating === '3' ? 'selected' : '' %>>Từ 3 sao</option>
+      <option value="4" <%= query && query.minRating === '4' ? 'selected' : '' %>>Từ 4 sao</option>
+    </select>
+  </div>
+
+  <div class="col-md-3">
+    <select name="sort" class="form-select">
+      <option value="">Mặc định</option>
+      <option value="name_asc"  <%= query && query.sort === 'name_asc'  ? 'selected' : '' %>>Tên A–Z</option>
+      <option value="name_desc" <%= query && query.sort === 'name_desc' ? 'selected' : '' %>>Tên Z–A</option>
+      <option value="price_asc" <%= query && query.sort === 'price_asc' ? 'selected' : '' %>>Giá tăng dần</option>
+      <option value="price_desc" <%= query && query.sort === 'price_desc' ? 'selected' : '' %>>Giá giảm dần</option>
+    </select>
+  </div>
+
+  <!-- HÀNG 2: RAM / ROM / MÀN / CHIP / PIN + NÚT LỌC -->
+  <div class="col-12 mt-2"></div>
+
+  <div class="col-md-2">
+    <select name="ram" class="form-select">
+      <option value="">Tất cả RAM</option>
+      <option value="4GB"  <%= query && query.ram === '4GB'  ? 'selected' : '' %>>4GB</option>
+      <option value="6GB"  <%= query && query.ram === '6GB'  ? 'selected' : '' %>>6GB</option>
+      <option value="8GB"  <%= query && query.ram === '8GB'  ? 'selected' : '' %>>8GB</option>
+      <option value="16GB" <%= query && query.ram === '16GB' ? 'selected' : '' %>>16GB</option>
+      <option value="32GB" <%= query && query.ram === '32GB' ? 'selected' : '' %>>32GB</option>
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <select name="storage" class="form-select">
+      <option value="">Tất cả bộ nhớ</option>
+      <option value="64GB"   <%= query && query.storage === '64GB'   ? 'selected' : '' %>>64GB</option>
+      <option value="128GB"  <%= query && query.storage === '128GB'  ? 'selected' : '' %>>128GB</option>
+      <option value="256GB"  <%= query && query.storage === '256GB'  ? 'selected' : '' %>>256GB</option>
+      <option value="512GB"  <%= query && query.storage === '512GB'  ? 'selected' : '' %>>512GB</option>
+      <option value="1TB"    <%= query && query.storage === '1TB'    ? 'selected' : '' %>>1TB</option>
+      <option value="2TB"    <%= query && query.storage === '2TB'    ? 'selected' : '' %>>2TB</option>
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <select name="screen" class="form-select">
+      <option value="">Tất cả kích thước màn</option>
+      <option value="6.1"  <%= query && query.screen === '6.1'  ? 'selected' : '' %>>6.1"</option>
+      <option value="6.7"  <%= query && query.screen === '6.7'  ? 'selected' : '' %>>6.7"</option>
+      <option value="11"   <%= query && query.screen === '11'   ? 'selected' : '' %>>11"</option>
+      <option value="12.9" <%= query && query.screen === '12.9' ? 'selected' : '' %>>12.9"</option>
+      <option value="13"   <%= query && query.screen === '13'   ? 'selected' : '' %>>13"</option>
+      <option value="14"   <%= query && query.screen === '14'   ? 'selected' : '' %>>14"</option>
+      <option value="16"   <%= query && query.screen === '16'   ? 'selected' : '' %>>16"</option>
+      <option value="24"   <%= query && query.screen === '24'   ? 'selected' : '' %>>24"</option>
+      <option value="27"   <%= query && query.screen === '27'   ? 'selected' : '' %>>27"</option>
+      <option value="32"   <%= query && query.screen === '32'   ? 'selected' : '' %>>32"</option>
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <select name="chip" class="form-select">
+      <option value="">Tất cả chip</option>
+      <option value="M1"     <%= query && query.chip === 'M1'     ? 'selected' : '' %>>Apple M1</option>
+      <option value="M1 Pro" <%= query && query.chip === 'M1 Pro' ? 'selected' : '' %>>Apple M1 Pro</option>
+      <option value="M2"     <%= query && query.chip === 'M2'     ? 'selected' : '' %>>Apple M2</option>
+      <option value="M2 Pro" <%= query && query.chip === 'M2 Pro' ? 'selected' : '' %>>Apple M2 Pro</option>
+      <option value="M3"     <%= query && query.chip === 'M3'     ? 'selected' : '' %>>Apple M3</option>
+      <option value="A15"    <%= query && query.chip === 'A15'    ? 'selected' : '' %>>A15 Bionic</option>
+      <option value="A16"    <%= query && query.chip === 'A16'    ? 'selected' : '' %>>A16 Bionic</option>
+      <option value="A17"    <%= query && query.chip === 'A17'    ? 'selected' : '' %>>A17 Pro</option>
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <select name="battery" class="form-select">
+      <option value="">Tất cả mức pin</option>
+      <option value="high"   <%= query && query.battery === 'high'   ? 'selected' : '' %>>Pin cao (≥ 6000 mAh)</option>
+      <option value="medium" <%= query && query.battery === 'medium' ? 'selected' : '' %>>Pin trung bình (4000–5999 mAh)</option>
+      <option value="low"    <%= query && query.battery === 'low'    ? 'selected' : '' %>>Pin thấp (&lt; 4000 mAh)</option>
+    </select>
+  </div>
+
+  <!-- NÚT LỌC -->
+  <div class="col-md-2 d-flex align-items-end">
+    <button type="submit" class="btn btn-primary w-100">
+      Lọc
+    </button>
+  </div>
+</form>
+
+<div class="row">
+  <% if (!products || products.length === 0) { %>
+    <p>Không có sản phẩm nào.</p>
+  <% } %>
+
+  <% products.forEach(function (p) {
+       const firstVariant = (p.variants && p.variants.length > 0) ? p.variants[0] : null;
+  %>
+    <div class="col-md-3 mb-4">
+      <div class="card h-100">
+        <a href="/products/<%= p._id %>">
+          <img src="<%= p.thumbnail %>" class="card-img-top" alt="<%= p.name %>">
+        </a>
+        <div class="card-body d-flex flex-column">
+          <h6 class="card-title">
+            <a href="/products/<%= p._id %>" class="text-decoration-none text-dark">
+              <%= p.name %>
+            </a>
+          </h6>
+
+          <p class="mb-1 fw-bold text-danger">
+            <%= p.basePrice.toLocaleString("vi-VN") %>₫
+          </p>
+
+          <p class="small mb-1">
+            ⭐ <%= (p.ratingAverage || 0).toFixed(1) %> / 5 (
+            <%= p.ratingCount || 0 %> đánh giá)
+          </p>
+
+          <div class="mt-auto d-flex flex-column gap-1">
+            <a href="/products/<%= p._id %>" class="btn btn-sm btn-outline-primary w-100">
+              Xem chi tiết
+            </a>
+
+            <% if (firstVariant) { %>
+              <button
+                type="button"
+                class="btn btn-sm btn-warning w-100 btn-add-to-cart"
+                data-product-id="<%= p._id %>"
+                data-variant-id="<%= firstVariant._id %>"
+                data-qty="1"
+              >
+                Thêm vào giỏ
+              </button>
+            <% } else { %>
+              <button class="btn btn-sm btn-secondary w-100" disabled>
+                Hết hàng
+              </button>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<% if (typeof safeTotal !== "undefined" && safeTotal > 1) { %>
+  <nav aria-label="Page navigation" class="mt-3">
+    <ul class="pagination justify-content-center">
+      <li class="page-item <%= safeCurrent === 1 ? 'disabled' : '' %>">
+        <a class="page-link" href="?<%= buildQuery(safeCurrent - 1) %>">«</a>
+      </li>
+
+      <% for (let i = start; i <= end; i++) { %>
+        <li class="page-item <%= i === safeCurrent ? 'active' : '' %>">
+          <a class="page-link" href="?<%= buildQuery(i) %>"><%= i %></a>
+        </li>
+      <% } %>
+
+      <li class="page-item <%= safeCurrent === safeTotal ? 'disabled' : '' %>">
+        <a class="page-link" href="?<%= buildQuery(safeCurrent + 1) %>">»</a>
+      </li>
+    </ul>
+  </nav>
+<% } %>
+

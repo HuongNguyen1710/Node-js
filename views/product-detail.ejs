@@ -1,0 +1,149 @@
+<div class="row">
+  <div class="col-md-5">
+    <div id="carouselImages" class="carousel slide mb-3" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <% product.images.forEach((img, idx) => { %>
+          <div class="carousel-item <%= idx === 0 ? 'active' : '' %>">
+            <img src="<%= img %>" class="d-block w-100" alt="<%= product.name %>">
+          </div>
+        <% }) %>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselImages" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselImages" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="col-md-7">
+    <h3><%= product.name %></h3>
+    <p>Thương hiệu: <strong><%= product.brand %></strong></p>
+    <p>Danh mục: <%= product.category %></p>
+
+    <p class="fs-4 fw-bold text-danger">
+      Từ <%= product.basePrice.toLocaleString("vi-VN") %>₫
+    </p>
+
+    <p>
+      ⭐ <%= (product.ratingAverage || 0).toFixed(1) %> / 5
+      (<%= product.ratingCount || 0 %> đánh giá)
+    </p>
+
+    <!-- Form giữ lại để gom input, NHƯNG không gửi trực tiếp lên /cart/add nữa -->
+    <form class="mb-3" id="product-detail-add-to-cart-form" js-add-to-cart-form>
+      <input type="hidden" name="productId" value="<%= product._id %>">
+
+      <div class="mb-2">
+        <label class="form-label">Chọn biến thể</label>
+        <select name="variantId" class="form-select">
+          <% product.variants.forEach(v => { %>
+            <option value="<%= v._id %>">
+              <%= v.name %> - <%= v.price.toLocaleString("vi-VN") %>₫ (Còn <%= v.stock %>)
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label">Số lượng</label>
+        <input type="number" name="qty" class="form-control" value="1" min="1">
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-warning btn-lg btn-add-to-cart-detail"
+        data-product-id="<%= product._id %>"
+        js-add-to-cart-form
+      >
+        Thêm vào giỏ
+      </button>
+    </form>
+
+
+    <div class="mt-3">
+      <h5>Mô tả ngắn</h5>
+      <p><%= product.shortDescription %></p>
+    </div>
+
+    <div class="mt-3">
+      <h5>Thông số kỹ thuật</h5>
+      <ul class="list-group">
+        <li class="list-group-item">Màn hình: <%= product.specs?.screen %></li>
+        <li class="list-group-item">Chip: <%= product.specs?.chip %></li>
+        <li class="list-group-item">RAM: <%= product.specs?.ram %></li>
+        <li class="list-group-item">Bộ nhớ: <%= product.specs?.storage %></li>
+        <li class="list-group-item">Pin: <%= product.specs?.battery %></li>
+      </ul>
+    </div>
+
+    <div class="mt-3">
+      <h5>Mô tả chi tiết</h5>
+      <p style="white-space: pre-line;"><%= product.description %></p>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="row" id="reviews">
+  <div class="col-md-6">
+    <h4>Đánh giá</h4>
+
+    <% if (currentUser) { %>
+      <form action="/products/<%= product._id %>/reviews" method="post" class="mb-3">
+        <div class="mb-2">
+          <label class="form-label">Số sao</label>
+          <select name="rating" class="form-select">
+            <option value="5">5 sao</option>
+            <option value="4">4 sao</option>
+            <option value="3">3 sao</option>
+            <option value="2">2 sao</option>
+            <option value="1">1 sao</option>
+          </select>
+        </div>
+        <div class="mb-2">
+          <input type="text" name="title" class="form-control" placeholder="Tiêu đề đánh giá">
+        </div>
+        <div class="mb-2">
+          <textarea name="content" class="form-control" rows="3" placeholder="Nội dung đánh giá"></textarea>
+        </div>
+        <button class="btn btn-primary btn-sm">Gửi đánh giá</button>
+      </form>
+    <% } else { %>
+      <p>Bạn cần <a href="/auth/login">đăng nhập</a> để đánh giá.</p>
+    <% } %>
+
+    <% reviews.forEach(r => { %>
+      <div class="border rounded p-2 mb-2">
+        <strong><%= r.user?.fullName || 'Người dùng' %></strong>
+        <span> - ⭐ <%= r.rating %>/5</span>
+        <div><strong><%= r.title %></strong></div>
+        <div><%= r.content %></div>
+        <small class="text-muted"><%= r.createdAt.toLocaleString("vi-VN") %></small>
+      </div>
+    <% }) %>
+  </div>
+
+  <div class="col-md-6" id="comments">
+    <h4>Bình luận</h4>
+    <form action="/products/<%= product._id %>/comments" method="post" class="mb-3">
+      <div class="mb-2">
+        <input type="text" name="authorName" class="form-control" placeholder="Tên của bạn (tuỳ chọn)">
+      </div>
+      <div class="mb-2">
+        <textarea name="content" class="form-control" rows="3" placeholder="Nội dung bình luận"></textarea>
+      </div>
+      <button class="btn btn-secondary btn-sm">Gửi bình luận</button>
+    </form>
+
+    <% comments.forEach(c => { %>
+      <div class="border rounded p-2 mb-2">
+        <strong><%= c.authorName || 'Khách' %></strong>
+        <div><%= c.content %></div>
+        <small class="text-muted"><%= c.createdAt.toLocaleString("vi-VN") %></small>
+      </div>
+    <% }) %>
+  </div>
+</div>

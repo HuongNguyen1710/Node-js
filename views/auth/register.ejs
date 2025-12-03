@@ -1,0 +1,248 @@
+<h3>Đăng ký tài khoản</h3>
+
+<% 
+  const provinces = [
+    "Hà Nội","Hồ Chí Minh","Hải Phòng","Đà Nẵng","Cần Thơ",
+    "An Giang","Bà Rịa - Vũng Tàu","Bắc Giang","Bắc Kạn","Bạc Liêu",
+    "Bắc Ninh","Bến Tre","Bình Định","Bình Dương","Bình Phước",
+    "Bình Thuận","Cà Mau","Cao Bằng","Đắk Lắk","Đắk Nông",
+    "Điện Biên","Đồng Nai","Đồng Tháp","Gia Lai","Hà Giang",
+    "Hà Nam","Hà Tĩnh","Hải Dương","Hậu Giang","Hòa Bình",
+    "Hưng Yên","Khánh Hòa","Kiên Giang","Kon Tum","Lai Châu",
+    "Lâm Đồng","Lạng Sơn","Lào Cai","Long An","Nam Định",
+    "Nghệ An","Ninh Bình","Ninh Thuận","Phú Thọ","Phú Yên",
+    "Quảng Bình","Quảng Nam","Quảng Ngãi","Quảng Ninh","Quảng Trị",
+    "Sóc Trăng","Sơn La","Tây Ninh","Thái Bình","Thái Nguyên",
+    "Thanh Hóa","Thừa Thiên Huế","Tiền Giang","Trà Vinh","Tuyên Quang",
+    "Vĩnh Long","Vĩnh Phúc","Yên Bái"
+  ];
+%>
+
+<% if (typeof error !== "undefined" && error) { %>
+  <div class="alert alert-danger"><%= error %></div>
+<% } %>
+
+<form action="/auth/register" method="post" class="col-md-8" id="registerForm">
+  <div class="row">
+    <div class="col-md-6 mb-2">
+      <label class="form-label">Họ tên *</label>
+      <input
+        type="text"
+        name="fullName"
+        class="form-control"
+        required
+        value="<%= typeof fullName !== 'undefined' ? fullName : '' %>"
+      >
+    </div>
+
+    <div class="col-md-6 mb-2">
+      <label class="form-label">Email *</label>
+      <input
+        type="email"
+        name="email"
+        class="form-control"
+        required
+        value="<%= typeof email !== 'undefined' ? email : '' %>"
+      >
+    </div>
+  </div>
+
+  <!-- Mật khẩu + con mắt -->
+  <div class="mb-2">
+    <label class="form-label">Mật khẩu *</label>
+    <div class="input-group">
+      <input
+        type="password"
+        name="password"
+        id="register-password"
+        class="form-control"
+        required
+        minlength="6"
+      >
+      <button
+        type="button"
+        class="btn btn-outline-secondary toggle-password"
+        data-target="#register-password"
+      >
+        <i class="bi bi-eye"></i>
+      </button>
+    </div>
+    <small class="text-muted">Mật khẩu tối thiểu 6 ký tự.</small>
+  </div>
+
+  <div class="mb-2">
+    <label class="form-label">Số điện thoại *</label>
+    <input
+      type="text"
+      name="phone"
+      class="form-control"
+      required
+      pattern="0[0-9]{9}"
+      maxlength="10"
+      value="<%= typeof phone !== 'undefined' ? phone : '' %>"
+    >
+    <small class="text-muted">Bắt đầu bằng 0 và đủ 10 số.</small>
+  </div>
+
+  <!-- Địa chỉ giao hàng -->
+  <div class="mb-2">
+    <label class="form-label">Địa chỉ (Số nhà, đường) *</label>
+    <input
+      type="text"
+      name="line1"
+      class="form-control"
+      required
+      value="<%= typeof line1 !== 'undefined' ? line1 : '' %>"
+    >
+  </div>
+
+  <!-- Tỉnh / Thành phố -->
+  <div class="mb-2">
+    <label class="form-label">Tỉnh / Thành phố *</label>
+    <select
+      name="city"
+      id="provinceSelect"
+      class="form-select select-location"
+      required
+    >
+      <option value="">-- Chọn tỉnh/thành phố --</option>
+      <% provinces.forEach(p => { %>
+        <option
+          value="<%= p %>"
+          <%= (typeof city !== 'undefined' && city === p) ? 'selected' : '' %>
+        >
+          <%= p %>
+        </option>
+      <% }) %>
+    </select>
+  </div>
+
+  <!-- Quận / Huyện -->
+  <div class="mb-2">
+    <label class="form-label">Quận / Huyện *</label>
+    <select
+      name="district"
+      id="districtSelect"
+      class="form-select select-location"
+      required
+    >
+      <option value=""><%= typeof district !== 'undefined' && district ? district : "-- Chọn quận/huyện --" %></option>
+    </select>
+  </div>
+
+  <!-- Phường / Xã -->
+  <div class="mb-2">
+    <label class="form-label">Phường / Xã *</label>
+    <select
+      name="ward"
+      id="wardSelect"
+      class="form-select select-location"
+      required
+    >
+      <option value=""><%= typeof ward !== 'undefined' && ward ? ward : "-- Chọn phường/xã --" %></option>
+    </select>
+  </div>
+
+  <button class="btn btn-primary mt-3">Đăng ký</button>
+</form>
+
+<!-- Select2 -->
+<link
+  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+  rel="stylesheet"
+/>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+  $(function () {
+    const VN_DATA = {
+      // --- Hà Nội ---
+      "Hà Nội": {
+        "Quận Ba Đình": ["Phường Điện Biên","Phường Kim Mã","Phường Thành Công"],
+        "Quận Hoàn Kiếm": ["Phường Hàng Bạc","Phường Hàng Bồ","Phường Tràng Tiền"]
+      },
+      // --- TP HCM ---
+      "Hồ Chí Minh": {
+        "Quận 1": ["Phường Bến Nghé","Phường Bến Thành","Phường Cô Giang"],
+        "Quận 3": ["Phường 2","Phường 4","Phường 6"]
+      },
+      // --- Tiền Giang ---
+      "Tiền Giang": {
+        "Cai Lậy": ["Xã Bình Phú","Xã Phú An","Xã Nhị Quý"],
+        "Cái Bè": ["Xã Mỹ Lợi","Xã An Thái Đông","Xã An Thái Trung"]
+      }
+    };
+
+    const $province = $("#provinceSelect");
+    const $district = $("#districtSelect");
+    const $ward = $("#wardSelect");
+
+    $(".select-location").select2({
+      width: "100%",
+      placeholder: "Chọn...",
+      allowClear: true
+    });
+
+    // Nếu đã có sẵn city/district/ward (submit lỗi) thì load lại
+    const oldProvince = "<%= typeof city !== 'undefined' ? city : '' %>";
+    const oldDistrict = "<%= typeof district !== 'undefined' ? district : '' %>";
+    const oldWard = "<%= typeof ward !== 'undefined' ? ward : '' %>";
+
+    function populateDistricts(province, selectedDistrict) {
+      $district.empty().append(`<option value="">-- Chọn quận/huyện --</option>`);
+      $ward.empty().append(`<option value="">-- Chọn phường/xã --</option>`);
+
+      if (province && VN_DATA[province]) {
+        Object.keys(VN_DATA[province]).forEach(d =>
+          $district.append(`<option value="${d}">${d}</option>`)
+        );
+        if (selectedDistrict && VN_DATA[province][selectedDistrict]) {
+          $district.val(selectedDistrict);
+        }
+      }
+      $district.trigger("change.select2");
+    }
+
+    function populateWards(province, district, selectedWard) {
+      $ward.empty().append(`<option value="">-- Chọn phường/xã --</option>`);
+
+      if (province && district && VN_DATA[province] && VN_DATA[province][district]) {
+        VN_DATA[province][district].forEach(w =>
+          $ward.append(`<option value="${w}">${w}</option>`)
+        );
+        if (selectedWard && VN_DATA[province][district].includes(selectedWard)) {
+          $ward.val(selectedWard);
+        }
+      }
+      $ward.trigger("change.select2");
+    }
+
+    $province.on("change", function () {
+      const province = $(this).val();
+      populateDistricts(province, "");
+    });
+
+    $district.on("change", function () {
+      const province = $province.val();
+      const district = $(this).val();
+      populateWards(province, district, "");
+    });
+
+    // Load lại dữ liệu cũ nếu có
+    if (oldProvince) {
+      $province.val(oldProvince).trigger("change");
+      populateDistricts(oldProvince, oldDistrict);
+      populateWards(oldProvince, oldDistrict, oldWard);
+    }
+
+    // Validate số điện thoại
+    $("#registerForm").on("submit", function (e) {
+      const phone = this.phone.value.trim();
+      if (!/^0\d{9}$/.test(phone)) {
+        e.preventDefault();
+        alert("Số điện thoại phải bắt đầu bằng 0 và đủ 10 số.");
+      }
+    });
+  });
+</script>

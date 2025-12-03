@@ -1,0 +1,12 @@
+<nav class="bg-dark">
+  <div class="container d-flex flex-wrap">
+    <!-- <a href="/products?category=dien-thoai" class="nav-link text-white">Điện thoại</a> -->
+    <a href="/products?category=laptop" class="nav-link text-white">Laptop</a>
+    <a href="/products?category=man-hinh" class="nav-link text-white">Màn hình</a>
+    <a href="/products?category=o-cung" class="nav-link text-white">Ổ cứng</a>
+    <a href="/products" class="nav-link text-white">Tất cả sản phẩm</a>
+    <% if (currentUser && currentUser.role === "admin") { %>
+      <a href="/admin/products" class="nav-link text-warning">Quản trị</a>
+    <% } %>
+  </div>
+</nav>

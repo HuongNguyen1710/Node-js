@@ -1,0 +1,48 @@
+<h3 class="mb-3">Đăng nhập</h3>
+
+<% if (typeof error !== "undefined" && error) { %>
+  <div class="alert alert-danger"><%= error %></div>
+<% } %>
+
+<% if (typeof success !== "undefined" && success) { %>
+  <div class="alert alert-success"><%= success %></div>
+<% } %>
+
+<form method="post" action="/auth/login" class="col-md-5">
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input
+      type="email"
+      name="email"
+      class="form-control"
+      required
+      value="<%= typeof email !== 'undefined' ? email : '' %>"
+    >
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Mật khẩu</label>
+    <div class="input-group">
+      <input
+        type="password"
+        name="password"
+        class="form-control"
+        id="login-password"
+        required
+      >
+      <button
+        type="button"
+        class="btn btn-outline-secondary toggle-password"
+        data-target="#login-password"
+      >
+        <i class="bi bi-eye"></i>
+      </button>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Đăng nhập</button>
+
+  <div class="mt-2">
+    <a href="/auth/forgot-password" class="small">Quên mật khẩu?</a>
+  </div>
+</form>

@@ -1,0 +1,337 @@
+<div class="container py-4">
+
+  <h3 class="mb-4">Tài khoản của tôi</h3>
+    <%
+        const _addresses = Array.isArray(addresses) ? addresses : [];
+    %>
+
+  <!-- ==== NAV TABS ==== -->
+  <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+
+    <!-- Thông tin cá nhân -->
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active"
+              id="info-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#info"
+              type="button"
+              role="tab">
+        Thông tin cá nhân
+      </button>
+      <a href="/auth/change-password" class="btn btn-outline-secondary btn-sm mt-3">
+        Đổi mật khẩu
+      </a>
+
+    </li>
+
+    <!-- Đơn hàng -->
+    <li class="nav-item" role="presentation">
+      <button class="nav-link"
+              id="orders-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#orders"
+              type="button"
+              role="tab">
+        Đơn hàng
+      </button>
+    </li>
+
+    <!-- Địa chỉ giao hàng -->
+    <li class="nav-item" role="presentation">
+      <button class="nav-link"
+              id="addresses-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#addresses"
+              type="button"
+              role="tab">
+        Địa chỉ giao hàng
+      </button>
+    </li>
+
+  </ul>
+
+  <!-- ==== TAB CONTENT ==== -->
+  <div class="tab-content mt-4">
+
+    <!-- ==============================
+         TAB 1 — THÔNG TIN CÁ NHÂN
+    =============================== -->
+    <div class="tab-pane fade show active" id="info" role="tabpanel">
+
+      <h5 class="mb-3">Thông tin cá nhân</h5>
+
+      <div class="card p-3">
+        <p><strong>Họ tên:</strong> <%= user.fullName %></p>
+        <p><strong>Email:</strong> <%= user.email %></p>
+
+        <% if (user.defaultAddress) { %>
+          <p><strong>Địa chỉ mặc định:</strong>
+            <%= user.defaultAddress.line1 %>,
+            <%= user.defaultAddress.ward %>,
+            <%= user.defaultAddress.district %>,
+            <%= user.defaultAddress.city %>
+          </p>
+          <p><strong>SĐT:</strong> <%= user.defaultAddress.phone %></p>
+        <% } else { %>
+          <p class="text-muted">Bạn chưa có địa chỉ mặc định.</p>
+        <% } %>
+
+      </div>
+    </div>
+
+
+    <!-- ==============================
+         TAB 2 — ĐƠN HÀNG
+    =============================== -->
+    <div class="tab-pane fade" id="orders" role="tabpanel">
+
+      <h5 class="mb-3">Đơn hàng của tôi</h5>
+
+      <!-- NAV SUB-TABS -->
+      <ul class="nav nav-pills mb-3">
+        <li class="nav-item">
+          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#pending">
+            Đang chờ xử lý (<%= ordersByStatus.pending.length %>)
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#processing">
+            Đang giao / xử lý (<%= ordersByStatus.processing.length %>)
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#completed">
+            Hoàn thành (<%= ordersByStatus.completed.length %>)
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#cancelled">
+            Đã hủy (<%= ordersByStatus.cancelled.length %>)
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+
+        <!-- Pending -->
+        <div class="tab-pane fade show active" id="pending">
+          <% if (ordersByStatus.pending.length === 0) { %>
+            <p class="text-muted">Không có đơn hàng đang chờ xử lý.</p>
+          <% } else { %>
+            <%- include("../order/_orders-table", { orders: ordersByStatus.pending }) %>
+          <% } %>
+        </div>
+
+        <!-- Processing -->
+        <div class="tab-pane fade" id="processing">
+          <% if (ordersByStatus.processing.length === 0) { %>
+            <p class="text-muted">Không có đơn xử lý.</p>
+          <% } else { %>
+            <%- include("../order/_orders-table", { orders: ordersByStatus.processing }) %>
+          <% } %>
+        </div>
+
+        <!-- Completed -->
+        <div class="tab-pane fade" id="completed">
+          <% if (ordersByStatus.completed.length === 0) { %>
+            <p class="text-muted">Không có đơn hoàn thành.</p>
+          <% } else { %>
+            <%- include("../order/_orders-table", { orders: ordersByStatus.completed }) %>
+          <% } %>
+        </div>
+
+        <!-- Cancelled -->
+        <div class="tab-pane fade" id="cancelled">
+          <% if (ordersByStatus.cancelled.length === 0) { %>
+            <p class="text-muted">Không có đơn đã hủy.</p>
+          <% } else { %>
+            <%- include("../order/_orders-table", { orders: ordersByStatus.cancelled }) %>
+          <% } %>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==============================
+         TAB 3 — ĐỊA CHỈ GIAO HÀNG
+    =============================== -->
+
+    <div class="tab-pane fade" id="addresses" role="tabpanel">
+    <div class="row">
+        <!-- Form thêm địa chỉ mới -->
+        <div class="col-md-4">
+        <h5>Thêm địa chỉ mới</h5>
+        <form action="/auth/addresses/add" method="post">
+            <div class="mb-2">
+            <label class="form-label">Tên người nhận</label>
+            <input type="text" name="fullName" class="form-control" required>
+            </div>
+            <div class="mb-2">
+            <label class="form-label">Số điện thoại</label>
+            <input type="text" name="phone" class="form-control" required pattern="0[0-9]{9}" maxlength="10">
+            </div>
+            <div class="mb-2">
+            <label class="form-label">Địa chỉ cụ thể</label>
+            <input type="text" name="line1" class="form-control" required placeholder="Số nhà, đường...">
+            </div>
+            <div class="mb-2">
+            <label class="form-label">Tỉnh/Thành phố</label>
+            <input type="text" name="city" class="form-control" required>
+            </div>
+            <div class="mb-2">
+            <label class="form-label">Quận/Huyện</label>
+            <input type="text" name="district" class="form-control">
+            </div>
+            <div class="mb-2">
+            <label class="form-label">Phường/Xã</label>
+            <input type="text" name="ward" class="form-control">
+            </div>
+            <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" name="isDefault" id="new-isDefault" value="true">
+            <label class="form-check-label" for="new-isDefault">
+                Đặt làm mặc định
+            </label>
+            </div>
+            <button class="btn btn-primary w-100">Lưu</button>
+        </form>
+        </div>
+
+        <!-- Danh sách địa chỉ -->
+        <div class="col-md-8">
+        <h5>Danh sách địa chỉ</h5>
+
+        <% if (_addresses.length === 0) { %>
+            <p>Chưa có địa chỉ nào. Hãy thêm địa chỉ mới ở bên trái.</p>
+        <% } else { %>
+            <% _addresses.forEach(function (addr, index) { %>
+            <div class="card mb-3">
+                <div class="card-body">
+                <form
+                    class="row g-2 align-items-center"
+                    method="post"
+                    action="/auth/addresses/<%= index %>/update"
+                >
+                    <div class="col-md-3">
+                    <label class="form-label small">Tên người nhận</label>
+                    <input
+                        type="text"
+                        name="fullName"
+                        class="form-control form-control-sm"
+                        value="<%= addr.fullName %>"
+                        required
+                    >
+                    </div>
+
+                    <div class="col-md-2">
+                    <label class="form-label small">Số ĐT</label>
+                    <input
+                        type="text"
+                        name="phone"
+                        class="form-control form-control-sm"
+                        value="<%= addr.phone %>"
+                        required
+                        pattern="0[0-9]{9}"
+                        maxlength="10"
+                    >
+                    </div>
+
+                    <div class="col-md-3">
+                    <label class="form-label small">Địa chỉ cụ thể</label>
+                    <input
+                        type="text"
+                        name="line1"
+                        class="form-control form-control-sm"
+                        value="<%= addr.line1 %>"
+                        required
+                    >
+                    </div>
+
+                    <div class="col-md-2">
+                    <label class="form-label small">Tỉnh/TP</label>
+                    <input
+                        type="text"
+                        name="city"
+                        class="form-control form-control-sm"
+                        value="<%= addr.city %>"
+                        required
+                    >
+                    </div>
+
+                    <div class="col-md-2">
+                    <label class="form-label small d-block">Quận/Huyện &amp; Phường/Xã</label>
+                    <input
+                        type="text"
+                        name="district"
+                        class="form-control form-control-sm mb-1"
+                        placeholder="Quận/Huyện"
+                        value="<%= addr.district || '' %>"
+                    >
+                    <input
+                        type="text"
+                        name="ward"
+                        class="form-control form-control-sm"
+                        placeholder="Phường/Xã"
+                        value="<%= addr.ward || '' %>"
+                    >
+                    </div>
+
+                    <div class="col-12 d-flex align-items-center mt-2">
+                    <div class="form-check me-3">
+                        <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="isDefault"
+                        id="addr-default-<%= index %>"
+                        value="true"
+                        <%= addr.isDefault ? "checked" : "" %>
+                        >
+                        <label class="form-check-label" for="addr-default-<%= index %>">
+                        Địa chỉ mặc định
+                        </label>
+                        <% if (addr.isDefault) { %>
+                        <span class="badge bg-success ms-1">Mặc định</span>
+                        <% } %>
+                    </div>
+
+                    <button type="submit" class="btn btn-sm btn-primary me-2">
+                        Lưu
+                    </button>
+
+                    <form
+                        action="/auth/addresses/<%= index %>/default"
+                        method="post"
+                        class="d-inline"
+                    >
+                        <button type="submit" class="btn btn-sm btn-outline-success me-2">
+                        Đặt làm mặc định
+                        </button>
+                    </form>
+
+                    <form
+                        action="/auth/addresses/<%= index %>/delete"
+                        method="post"
+                        class="d-inline"
+                    >
+                        <button
+                        type="submit"
+                        class="btn btn-sm btn-outline-danger"
+                        onclick="return confirm('Xóa địa chỉ này?');"
+                        >
+                        Xóa
+                        </button>
+                    </form>
+                    </div>
+                </form>
+                </div>
+            </div>
+            <% }) %>
+        <% } %>
+        </div>
+    </div>
+    </div>
+    
+
+  </div>
+</div>

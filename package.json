@@ -1,0 +1,23 @@
+{
+  "name": "huong-han-store",
+  "version": "1.0.0",
+  "description": "Huong Han Store",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.0",
+    "ejs": "^3.1.9",
+    "express": "^4.19.0",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.17.3",
+    "mongoose": "^8.0.0",
+    "nodemailer": "^7.0.11"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}

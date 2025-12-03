@@ -1,0 +1,60 @@
+<nav class="navbar navbar-dark" style="background-color: #ffc107;">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/">HuongHan Store</a>
+
+    <form class="d-flex flex-grow-1 mx-3" action="/products" method="get">
+      <input
+        class="form-control me-2"
+        type="search"
+        placeholder="Bạn cần tìm gì?"
+        name="q"
+      />
+      <button class="btn btn-dark" type="submit">Tìm</button>
+    </form>
+
+    <% if (currentUser) { %>
+      <div class="dropdown me-3" id="userDropdownWrapper">
+        <button
+          class="btn btn-outline-dark dropdown-toggle"
+          type="button"
+          id="userDropdownToggle"
+          data-user-menu-toggle="true"
+          aria-expanded="false"
+        >
+          Xin chào, <%= currentUser.fullName %>
+        </button>
+        <ul
+          class="dropdown-menu dropdown-menu-end"
+          aria-labelledby="userDropdownToggle"
+          id="userDropdownMenu"
+        >
+          <li>
+            <a class="dropdown-item" href="/auth/profile">
+              Thông tin cá nhân
+            </a>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
+          <li>
+            <form action="/auth/logout" method="post" class="px-3 m-0">
+              <button class="btn btn-link p-0">Đăng xuất</button>
+            </form>
+          </li>
+        </ul>
+      </div>
+    <% } else { %>
+      <a href="/auth/login" class="btn btn-outline-dark me-2">Đăng nhập</a>
+      <a href="/auth/register" class="btn btn-dark me-3">Đăng ký</a>
+    <% } %>
+
+
+    <a href="/cart" class="btn btn-dark position-relative">
+      Giỏ hàng
+      <span
+        id="cart-count"
+        class="badge bg-danger position-absolute top-0 start-100 translate-middle"
+      >
+        <%= cartCount || 0 %>
+      </span>
+    </a>
+  </div>
+</nav>

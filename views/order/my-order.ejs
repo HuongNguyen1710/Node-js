@@ -1,0 +1,24 @@
+<h3>Đơn hàng của tôi</h3>
+
+<% if (!orders || orders.length === 0) { %>
+  <p>Chưa có đơn hàng nào.</p>
+<% } else { %>
+  <% orders.forEach(o => { %>
+    <div class="border rounded mb-3 p-2">
+      <div>
+        <strong>Mã đơn:</strong> <%= o._id %> -
+        <strong>Trạng thái:</strong> <%= o.status %>
+      </div>
+      <div><small class="text-muted"><%= o.createdAt.toLocaleString("vi-VN") %></small></div>
+      <ul class="mt-2">
+        <% o.items.forEach(it => { %>
+          <li>
+            <%= it.variantName %> x <%= it.qty %> -
+            <%= it.price.toLocaleString("vi-VN") %>₫
+          </li>
+        <% }) %>
+      </ul>
+      <div><strong>Tổng:</strong> <%= o.totalAmount.toLocaleString("vi-VN") %>₫</div>
+    </div>
+  <% }) %>
+<% } %>
